@@ -30,16 +30,20 @@ router.post('/', authMiddleware, async (req, res) => {
 
 // Get posts, optionally filter by city/tag
 router.get('/', async (req, res) => {
-  const { city, tag } = req.query;
+  const { city, tags, page = 1, limit = 20 } = req.query;
 
   try {
+    const tagArray = tags ? tags.split(',') : undefined;
     const posts = await prisma.post.findMany({
       where: {
         city: city || undefined,
-        tags: tag ? { has: tag } : undefined
+        tags: tagArray ? { hasSome: tagArray } : undefined,
       },
       orderBy: { createdAt: 'desc' },
-      include: { author: true }
+      include: { author: true },
+      skip: (parseInt(page) - 1) * parseInt(limit),
+      take: parseInt(limit),
+      include: { author: true },
     });
 
     res.json(posts);
