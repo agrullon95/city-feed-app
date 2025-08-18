@@ -1,0 +1,44 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Next.js build output
+.next/
+out/
+build/
+
+# Production
+dist/
+.cache/
+
+# Local environment files (keep examples in repo)
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+
+# Editor & OS
+.DS_Store
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Testing / coverage
+coverage/
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Misc / secrets
+*.pem
+*.p12
+*.orig

@@ -1,0 +1,10 @@
+{
+  "name": "city-feed",
+  "private": true,
+  "workspaces": ["backend", "frontend/web", "frontend/mobile"],
+  "scripts": {
+    "start:backend": "npm --workspace backend run dev",
+    "start:web": "npm --workspace frontend/web run dev",
+    "start:mobile": "npm --workspace frontend/mobile run start"
+  }
+}
