@@ -14,6 +14,7 @@ model User {
   password  String
   isAnon    Boolean  @default(false)
   posts     Post[]
+  comments  Comment[]
 }
 
 model Post {
@@ -25,5 +26,16 @@ model Post {
   anonymous Boolean   @default(false)
   createdAt DateTime  @default(now())
   author    User?     @relation(fields: [authorId], references: [id])
+  authorId  Int?
+  comments  Comment[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    Int
+  author    User?    @relation(fields: [authorId], references: [id])
   authorId  Int?
 }
