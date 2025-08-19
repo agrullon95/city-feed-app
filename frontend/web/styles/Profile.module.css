@@ -43,6 +43,12 @@
   border: 1px solid var(--border);
 }
 
+.username {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+}
+
 .actions {
   display: flex;
   gap: 8px;
