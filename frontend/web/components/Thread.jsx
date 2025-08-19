@@ -109,7 +109,15 @@ const Thread = ({ thread }) => {
                     />
 
                     <div className={styles.composerActions}>
-                        <div className={styles.charCount}>{MAX_CONTENT - newComment.length} characters</div>
+                        {(() => {
+                            const remaining = Math.max(0, MAX_CONTENT - newComment.length);
+                            const warn = remaining <= 20;
+                            return (
+                                <div className={warn ? `${styles.charCount} ${styles.charCountWarn}` : styles.charCount}>
+                                    {remaining} characters
+                                </div>
+                            );
+                        })()}
                         <button
                             className={ui.btnPrimary}
                             onClick={handleAddComment}
