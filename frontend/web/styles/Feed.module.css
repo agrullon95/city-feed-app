@@ -1,0 +1,45 @@
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Make feed one post per line like traditional social feeds */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.loadMore {
+  padding: 10px 16px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background var(--transition), transform var(--transition);
+  text-decoration: none;
+}
+
+.loadMore:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.loadMore:disabled {
+  background: #9bbcfb;
+  cursor: not-allowed;
+}
+
+.empty {
+  text-align: center;
+  color: var(--muted);
+}
+
+/* Responsive: reduce padding on small screens */
+@media (max-width: 480px) {
+  .container {
+    padding: 12px;
+  }
+}

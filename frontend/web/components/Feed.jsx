@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import PostCard from './PostCard';
 import { useAuth } from '../context/authContext';
+import styles from '../styles/Feed.module.css';
 
 const Feed = ({ city, tags }) => {
   const { user, token } = useAuth();
@@ -31,11 +32,22 @@ const Feed = ({ city, tags }) => {
   }, [page, city, tags]);
 
   return (
-    <div>
-      {posts.map(post => <PostCard key={post.id} post={post} />)}
-      <button onClick={() => setPage(p => p + 1)} disabled={loading}>
-        {loading ? 'Loading...' : 'Load More'}
-      </button>
+    <div className={styles.container}>
+      {posts.length === 0 ? (
+        <div className={styles.empty}>No posts yet. Be the first to post!</div>
+      ) : (
+        <div className={styles.grid}>
+          {posts.map(post => (
+            <PostCard key={post.id} post={post} />
+          ))}
+        </div>
+      )}
+
+      <div style={{ textAlign: 'center', marginTop: 18 }}>
+        <button className={styles.loadMore} onClick={() => setPage(p => p + 1)} disabled={loading}>
+          {loading ? 'Loading...' : 'Load More'}
+        </button>
+      </div>
     </div>
   );
 };

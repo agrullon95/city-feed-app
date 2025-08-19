@@ -1,0 +1,21 @@
+/* Shared design tokens */
+:root {
+  --bg: #f9fafb;
+  --card-bg: #ffffff;
+  --muted: #6b7280;
+  --text: #111827;
+  --accent: #0070f3;
+  --radius: 12px;
+  --shadow: 0 8px 24px rgba(16,24,40,0.04);
+  --border: rgba(16,24,40,0.06);
+  --glass: rgba(16,24,40,0.03);
+  --max-width: 960px;
+  --gap: 20px;
+  --transition: 150ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition: 0ms ease;
+  }
+}

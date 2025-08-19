@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/authContext";
+import styles from "../styles/LoginForm.module.css";
 
 const LoginForm = () => {
   const { login, loading } = useAuth();
@@ -15,44 +16,39 @@ const LoginForm = () => {
       await login({ email, password });
       // Redirect or show success — AuthContext handles user state
     } catch (err) {
-      setError(err);
+      setError(err?.message || String(err));
     }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        maxWidth: "400px",
-        margin: "0 auto",
-        padding: "20px",
-        border: "1px solid #ddd",
-        borderRadius: "8px",
-      }}
-    >
-      <h2>Login</h2>
-      {error && <div style={{ color: "red" }}>{error}</div>}
+    <section className={styles.card} aria-labelledby="login-heading">
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <h2 id="login-heading" className={styles.title}>Login</h2>
+        {error && <div className={styles.error}>{error}</div>}
 
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
-      />
+        <input
+          className={styles.input}
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
 
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
-      />
+        <input
+          className={styles.input}
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
-      <button type="submit" disabled={loading}>
-        {loading ? "Logging in..." : "Login"}
-      </button>
-    </form>
+        <button className={styles.submit} type="submit" disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </button>
+      </form>
+    </section>
   );
 };
 
