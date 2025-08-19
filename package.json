@@ -9,12 +9,16 @@
   "scripts": {
     "start:backend": "npm --workspace backend run dev",
     "start:web": "npm --workspace frontend/web run dev",
-    "start:mobile": "npm --workspace frontend/mobile run start"
+    "start:mobile": "npm --workspace frontend/mobile run start",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write ."
   },
   "devDependencies": {
     "@eslint/css": "^0.10.0",
     "@eslint/js": "^9.33.0",
     "eslint": "^9.33.0",
+    "eslint-config-next": "^15.4.7",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-react": "^7.37.5",
