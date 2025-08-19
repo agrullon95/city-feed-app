@@ -4,7 +4,7 @@ import ui from '../styles/ui.module.css';
 import styles from '../styles/Profile.module.css';
 
 const ProfilePage = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
 
   return (
     <div className={styles.container}>
@@ -16,10 +16,6 @@ const ProfilePage = () => {
             <div className={styles.label}>Username</div>
             <div className={styles.username}>{user?.username || '—'}</div>
           </div>
-        </div>
-
-        <div className={styles.actions}>
-          <button className={ui.btnText} onClick={logout}>Log out</button>
         </div>
       </div>
 
