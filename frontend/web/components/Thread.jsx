@@ -77,7 +77,7 @@ const Thread = ({ thread }) => {
                                 <div className={styles.commentMeta}>
                                     {comment.author?.username || 'Anonymous'} • {new Date(comment.createdAt).toLocaleString()}
                                 </div>
-                                <div>{comment.content}</div>
+                                <div className={styles.commentContent}>{comment.content}</div>
                             </div>
                         </div>
                     ))

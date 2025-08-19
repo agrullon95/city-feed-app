@@ -12,22 +12,23 @@
   margin-top: 20px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .commentCard {
   display: flex;
   gap: 12px;
   align-items: flex-start;
-  padding: 12px;
+  padding: 16px; /* slightly taller */
+  min-height: 60px; /* ensure a little more vertical space */
   border-radius: 8px;
   border: 1px solid var(--border);
   background: var(--card-bg);
 }
 
 .commentAvatar {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: #e6e6e6;
   flex-shrink: 0;
@@ -35,12 +36,22 @@
 
 .commentBody {
   flex: 1;
+  min-width: 0; /* allow text to wrap inside flex */
 }
 
 .commentMeta {
   font-size: 12px;
   color: var(--muted);
   margin-bottom: 6px;
+}
+
+/* make sure comment content wraps and preserves line breaks */
+.commentContent {
+  font-size: 14px;
+  line-height: 1.45;
+  white-space: pre-wrap; /* keep user line breaks */
+  word-break: break-word; /* break long words */
+  overflow-wrap: anywhere; /* break anywhere if needed to avoid overflow */
 }
 
 .addCommentForm {
