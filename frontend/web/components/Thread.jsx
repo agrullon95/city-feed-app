@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import PostCard from './PostCard';
 import styles from '../styles/Thread.module.css';
+import ui from '../styles/ui.module.css';
+import { MAX_CONTENT } from '../utils/constants';
 import { useAuth } from '../context/authContext';
 import { useRouter } from 'next/router';
 
@@ -11,6 +13,8 @@ const Thread = ({ thread }) => {
     const router = useRouter();
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
+    const [submitting, setSubmitting] = useState(false);
+    const [error, setError] = useState('');
 
     useEffect(() => {
         const fetchComments = async () => {
@@ -35,6 +39,8 @@ const Thread = ({ thread }) => {
         const content = newComment.trim();
         if (!content) return;
 
+        setError('');
+        setSubmitting(true);
         try {
             const res = await axios.post(
                 `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${thread.id}/comments`,
@@ -45,6 +51,9 @@ const Thread = ({ thread }) => {
             setNewComment('');
         } catch (err) {
             console.error(err);
+            setError(err.response?.data?.error || 'Failed to post comment');
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -77,21 +86,44 @@ const Thread = ({ thread }) => {
 
             {/* Add Comment Form */}
             <div className={styles.addCommentForm}>
-                <textarea
-                    className={styles.commentInput}
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                    placeholder={user ? "Write a comment..." : "Sign in to add a comment"}
-                    disabled={!user}
-                    aria-label="Add a comment"
-                />
-                <button
-                    className={styles.submitButton}
-                    onClick={handleAddComment}
-                    disabled={!user || newComment.trim().length === 0}
-                >
-                    {user ? 'Submit' : 'Sign in'}
-                </button>
+                <div className={styles.composerAvatar} aria-hidden>
+                    {/* small avatar */}
+                    <img
+                        src={user?.avatar || 'https://placehold.co/40'}
+                        alt="Your avatar"
+                        className={styles.composerAvatarImg}
+                    />
+                </div>
+
+                <div className={styles.composerBox}>
+                    <label htmlFor={`comment-${thread.id}`} className={styles.srOnly}>Add a comment</label>
+                    <textarea
+                        id={`comment-${thread.id}`}
+                        className={styles.commentTextarea}
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                        placeholder={user ? "Share your thoughts..." : "Sign in to add a comment"}
+                        disabled={!user || submitting}
+                        aria-label="Add a comment"
+                        maxLength={500}
+                    />
+
+                    <div className={styles.composerActions}>
+                        <div className={styles.charCount}>{MAX_CONTENT - newComment.length} characters</div>
+                        <button
+                            className={ui.btnPrimary}
+                            onClick={handleAddComment}
+                            disabled={!user || newComment.trim().length === 0 || submitting}
+                            aria-disabled={!user || newComment.trim().length === 0 || submitting}
+                        >
+                            {submitting ? 'Posting…' : (user ? 'Post comment' : 'Sign in')}
+                        </button>
+                    </div>
+
+                    {error && (
+                        <div className={styles.inlineError} role="status" aria-live="polite">{error}</div>
+                    )}
+                </div>
             </div>
         </div>
     );

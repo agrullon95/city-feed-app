@@ -63,21 +63,12 @@
   margin-top: 6px;
 }
 
-.submit {
-  padding: 10px 16px;
-  background: var(--accent);
-  color: #fff;
-  border-radius: 8px;
-  border: none;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
+.charCount {
+  font-size: 13px;
+  color: var(--muted);
 }
 
-.submit:disabled {
-  background: #9bbcfb;
-  cursor: not-allowed;
-}
+/* submit visuals moved to ui.module.css (.btnPrimary) */
 
 .hint {
   font-size: 13px;

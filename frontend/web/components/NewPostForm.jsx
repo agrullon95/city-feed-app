@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import styles from '../styles/NewPostForm.module.css';
+import ui from '../styles/ui.module.css';
+import { MAX_CONTENT } from '../utils/constants';
 
 const NewPostForm = ({ onPostCreated }) => {
   const [content, setContent] = useState('');
+  // use shared MAX_CONTENT
   const [city, setCity] = useState('');
   const [tags, setTags] = useState('');
   const [anonymous, setAnonymous] = useState(false);
@@ -50,6 +53,7 @@ const NewPostForm = ({ onPostCreated }) => {
             onChange={e => setContent(e.target.value)}
             placeholder="What's on your mind?"
             aria-label="Post content"
+            maxLength={MAX_CONTENT}
           />
         </div>
 
@@ -89,8 +93,13 @@ const NewPostForm = ({ onPostCreated }) => {
         </div>
 
         <div className={styles.actions}>
-          <div />
-          <button className={styles.submit} type="submit" disabled={loading}>
+          <div className={styles.charCount} aria-live="polite">{MAX_CONTENT - content.length} characters</div>
+          <button
+            className={ui.btnPrimary}
+            type="submit"
+            disabled={loading || content.trim().length === 0 || city.trim().length === 0}
+            aria-disabled={loading || content.trim().length === 0 || city.trim().length === 0}
+          >
             {loading ? 'Posting...' : 'Post'}
           </button>
         </div>
