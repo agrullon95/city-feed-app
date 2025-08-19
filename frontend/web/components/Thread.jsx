@@ -34,27 +34,35 @@ const Thread = ({ thread }) => {
     };
 
     return (
-        <div className={styles.container}>
-            <PostCard post={thread} />
+        <div className={styles.threadContainer}>
+            {/* Thread Header */}
+            <div className={styles.threadHeader}>
+                <PostCard post={thread} />
+            </div>
+
+            {/* Comments Section */}
             <div className={styles.commentsSection}>
                 <h2>Comments</h2>
                 {comments.length === 0 ? (
                     <p>No comments yet. Be the first to comment!</p>
                 ) : (
                     comments.map(comment => (
-                        <div key={comment.id} className={styles.comment}>
+                        <div key={comment.id} className={styles.commentCard}>
                             <p><strong>{comment.authorName}</strong>: {comment.content}</p>
                         </div>
                     ))
                 )}
-                <div className={styles.addCommentSection}>
-                    <textarea
-                        value={newComment}
-                        onChange={(e) => setNewComment(e.target.value)}
-                        placeholder="Write a comment..."
-                    />
-                    <button onClick={handleAddComment}>Add Comment</button>
-                </div>
+            </div>
+
+            {/* Add Comment Form */}
+            <div className={styles.addCommentForm}>
+                <textarea
+                    className={styles.commentInput}
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    placeholder="Write a comment..."
+                />
+                <button className={styles.submitButton} onClick={handleAddComment}>Submit</button>
             </div>
         </div>
     );

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import PostCard from '../../components/PostCard';
+import Thread from '../../components/Thread';
 import styles from '../../styles/Thread.module.css';
 
 const ThreadPage = () => {
@@ -33,7 +33,7 @@ const ThreadPage = () => {
 
   return (
     <div className={styles.container}>
-      <PostCard post={thread} />
+      <Thread thread={thread} />
     </div>
   );
 };
