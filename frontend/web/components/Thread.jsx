@@ -8,7 +8,7 @@ import { MAX_CONTENT } from '../utils/constants';
 import { useAuth } from '../context/authContext';
 import { useRouter } from 'next/router';
 
-const Thread = ({ thread }) => {
+const Thread = ({ thread, onCommentAdded }) => {
     const { user, token } = useAuth();
     const router = useRouter();
     const [comments, setComments] = useState([]);
@@ -50,6 +50,7 @@ const Thread = ({ thread }) => {
                 { withCredentials: true }
             );
             setComments(prev => [...prev, res.data]);
+            if (onCommentAdded) onCommentAdded(res.data);
             setNewComment('');
         } catch (err) {
             console.error(err);
@@ -135,6 +136,7 @@ const Thread = ({ thread }) => {
                                                         );
                                                         // append reply locally under the parent comment
                                                         setComments(prev => prev.map(c => c.id === comment.id ? { ...c, replies: [...(c.replies || []), res.data] } : c));
+                                                        if (onCommentAdded) onCommentAdded(res.data);
                                                         setReplyText('');
                                                         setReplyingTo(null);
                                                     } catch (err) {
@@ -210,6 +212,7 @@ const Thread = ({ thread }) => {
 
 Thread.propTypes = {
     thread: PropTypes.object.isRequired,
+    onCommentAdded: PropTypes.func,
 };
 
 export default Thread;

@@ -31,9 +31,16 @@ const ThreadPage = () => {
 
   if (!thread) return <div>Thread not found.</div>;
 
+  const handleCommentAdded = (createdComment) => {
+    setThread(prev => ({
+      ...prev,
+      commentsCount: (prev?.commentsCount ?? prev?.comments?.length ?? 0) + 1,
+    }));
+  };
+
   return (
     <div className={styles.container}>
-      <Thread thread={thread} />
+      <Thread thread={thread} onCommentAdded={handleCommentAdded} />
     </div>
   );
 };
