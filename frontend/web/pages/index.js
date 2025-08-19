@@ -1,4 +1,5 @@
 import Feed from "../components/Feed";
+import PropTypes from "prop-types";
 import NewPostForm from "../components/NewPostForm";
 import React, { useState } from "react";
 import { AuthProvider, useAuth } from "../context/authContext";
@@ -57,3 +58,9 @@ export default function Home({ pageProps }) {
     </AuthProvider>
   );
 }
+
+Home.propTypes = {
+  pageProps: PropTypes.shape({
+    initialUser: PropTypes.object,
+  }),
+};

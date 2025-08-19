@@ -12,7 +12,7 @@ export function signToken(payload) {
 export function verifyToken(token) {
   try {
     return jwt.verify(token, JWT_SECRET);
-  } catch (err) {
+  } catch {
     throw new Error('Invalid token');
   }
 }

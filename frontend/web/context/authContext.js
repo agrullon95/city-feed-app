@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
@@ -73,4 +74,8 @@ export const AuthProvider = ({ children, initialUser }) => {
   );
 };
 
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+  initialUser: PropTypes.object,
+};
 export const useAuth = () => useContext(AuthContext);
