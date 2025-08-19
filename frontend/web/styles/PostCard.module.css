@@ -47,13 +47,39 @@
 }
 
 .chevron {
-  font-size: 20px;
+  /* bigger, centered chevron */
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  line-height: 1;
   color: var(--muted);
-  margin-left: 8px;
-  transition: transform 160ms ease, opacity 160ms;
-  opacity: 0.9;
+  border-radius: 6px;
+  transition: transform 180ms cubic-bezier(.2,.9,.3,1), opacity 160ms;
+  opacity: 0.95;
 }
-.clickable:hover .chevron { transform: translateX(4px); opacity: 1; }
+.chevron svg { transition: transform 220ms cubic-bezier(.22,.9,.3,1); transform-origin: center; }
+.clickable:hover .chevron { transform: translateY(-50%) translateX(8px) scale(1.04); opacity: 1; color: var(--accent); }
+.clickable:hover .chevron svg { transform: translateX(3px) rotate(6deg) scale(1.03); }
+
+/* Active (press) state for tactile feedback on touch/mouse */
+.clickable:active .chevron,
+.clickable .chevron:active {
+  /* slightly smaller and less translated when pressed */
+  transform: translateY(-50%) translateX(4px) scale(0.98);
+  opacity: 1;
+  filter: brightness(0.92);
+}
+.clickable:active .chevron svg,
+.clickable .chevron:active svg {
+  transform: translateX(1px) rotate(3deg) scale(0.99);
+}
 
 .content {
   margin: 10px 0;

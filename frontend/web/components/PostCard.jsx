@@ -35,7 +35,21 @@ const PostCard = ({ post }) => {
           <div className={styles.meta}>{post.city || 'Unknown city'}{createdAt ? ` • ${createdAt.toLocaleString()}` : ''}</div>
         </div>
 
-        {!isSingle && <div className={styles.chevron} aria-hidden>›</div>}
+        {!isSingle && (
+          <div className={styles.chevron} aria-hidden>
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+        )}
       </div>
 
       <div className={styles.content}>{post.content}</div>
@@ -67,7 +81,7 @@ const PostCard = ({ post }) => {
           </button>
         </div>
 
-        <div className={styles.meta}>{post.anonymous ? '' : post.author?.username || ''}</div>
+        {/* <div className={styles.meta}>{post.anonymous ? '' : post.author?.username || ''}</div> */}
       </div>
     </article>
   );
