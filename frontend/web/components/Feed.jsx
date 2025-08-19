@@ -1,25 +1,35 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import PostCard from './PostCard';
+import SkeletonPost from './SkeletonPost';
 import { useAuth } from '../context/authContext';
 import styles from '../styles/Feed.module.css';
+import ui from '../styles/ui.module.css';
+import { debounce } from 'lodash';
 
 const Feed = ({ city, tags }) => {
-  const { user, token } = useAuth();
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const sentinelRef = useRef(null);
+  const observer = useRef(null);
 
   const loadPosts = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/posts`, {
-        params: { page, city, tags },
-        headers: { Authorization: `Bearer ${token}` },
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/posts`,
+        { page, city, tags, limit: 20 }
+      );
+      const { posts: newPosts, hasMore: morePosts } = res.data;
+      setPosts(prev => {
+        const existingIds = new Set(prev.map(post => post.id));
+        const uniquePosts = newPosts.filter(post => !existingIds.has(post.id));
+        return [...prev, ...uniquePosts];
       });
-      setPosts(prev => [...prev, ...res.data]);
+      setHasMore(morePosts);
     } catch (err) {
       console.error(err);
     } finally {
@@ -27,27 +37,74 @@ const Feed = ({ city, tags }) => {
     }
   };
 
+  // Debounced version of loadPosts
+  const debouncedLoadPosts = debounce(loadPosts, 300);
+
+  // Load posts when page or filters change
   useEffect(() => {
-    loadPosts();
-  }, [page, city, tags]);
+    debouncedLoadPosts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
+
+  // Reset feed when city/tags change
+  useEffect(() => {
+    setPosts([]);
+    setPage(1);
+    setHasMore(true);
+  }, [city, tags]);
+
+  // IntersectionObserver to implement infinite scroll
+  useEffect(() => {
+    if (!sentinelRef.current) return;
+    if (!hasMore) return;
+
+    if (observer.current) observer.current.disconnect();
+    observer.current = new IntersectionObserver(
+      (entries) => {
+        const first = entries[0];
+        if (first.isIntersecting && !loading && hasMore) {
+          setLoading(true); // Prevent duplicate triggers
+          setPage((p) => p + 1);
+        }
+      },
+      { root: null, rootMargin: '200px', threshold: 0.1 }
+    );
+
+    observer.current.observe(sentinelRef.current);
+    return () => observer.current && observer.current.disconnect();
+  }, [sentinelRef.current, hasMore, loading]);
 
   return (
-    <div className={styles.container}>
-      {posts.length === 0 ? (
-        <div className={styles.empty}>No posts yet. Be the first to post!</div>
-      ) : (
+    <div className={styles.container} aria-busy={loading}>
+      {posts.length === 0 && loading ? (
         <div className={styles.grid}>
-          {posts.map(post => (
-            <PostCard key={post.id} post={post} />
+          {Array.from({ length: 3 }).map((_, i) => (
+            <SkeletonPost key={i} />
           ))}
         </div>
+      ) : (
+        posts.length === 0 ? (
+          <div className={styles.empty}>No posts yet. Be the first to post!</div>
+        ) : (
+          <div className={styles.grid}>
+            {posts.map((post, index) => (
+              <PostCard key={post.id || `post-${index}`} post={post} />
+            ))}
+          </div>
+        )
       )}
 
-      <div style={{ textAlign: 'center', marginTop: 18 }}>
-        <button className={styles.loadMore} onClick={() => setPage(p => p + 1)} disabled={loading}>
-          {loading ? 'Loading...' : 'Load More'}
-        </button>
+      {/* sentinel for infinite scroll; visible fallback message for screen readers */}
+      <div ref={sentinelRef} className={`${ui.center} ${ui.mtLarge}`} aria-hidden={!loading}>
+        {loading && <div className={styles.loadMore}>Loading...</div>}
       </div>
+
+      {/* End of feed message */}
+      {!hasMore && !loading && (
+        <div className={`${ui.center} ${ui.mtLarge} ${styles.endOfFeed}`}>
+          No more posts to load.
+        </div>
+      )}
     </div>
   );
 };

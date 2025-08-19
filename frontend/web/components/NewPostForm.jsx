@@ -54,7 +54,7 @@ const NewPostForm = ({ onPostCreated }) => {
         </div>
 
         <div className={styles.row}>
-          <div className={styles.field} style={{ flex: 1 }}>
+          <div className={`${styles.field} ${styles.flexGrow}`}>
             <input
               className={styles.input}
               type="text"
@@ -65,7 +65,7 @@ const NewPostForm = ({ onPostCreated }) => {
             />
           </div>
 
-          <div className={styles.field} style={{ flex: 1 }}>
+          <div className={`${styles.field} ${styles.flexGrow}`}>
             <input
               className={styles.input}
               type="text"
@@ -83,7 +83,7 @@ const NewPostForm = ({ onPostCreated }) => {
             <span>Post anonymously</span>
           </label>
 
-          <div style={{ marginLeft: 'auto' }} className={styles.hint}>
+          <div className={`${styles.hint} ${styles.hintRight}`}>
             Optional: tags help others find your post
           </div>
         </div>
