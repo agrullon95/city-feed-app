@@ -65,6 +65,31 @@
   text-align: center;
 }
 
+.formFooter {
+  text-align: center;
+  margin-top: 12px;
+}
+
+.formFooter button {
+  background: none;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.formFooter button:hover {
+  background: var(--glass);
+}
+
+.formFooter button:focus-visible {
+  outline: 3px solid rgba(0, 112, 243, 0.18);
+  outline-offset: 2px;
+}
+
 @media (max-width: 480px) {
   .card { padding: 12px; }
 }
