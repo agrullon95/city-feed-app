@@ -18,28 +18,29 @@ function HomeContent() {
     return <div style={styles.loading}>Loading...</div>;
 
   if (!user) {
+    const switchFooter = (
+      <div className=""/* footer styled by form module */>
+        {showSignup ? (
+          <>
+            Already have an account?{" "}
+            <button onClick={() => setShowSignup(false)}>
+              Login
+            </button>
+          </>
+        ) : (
+          <>
+            Don’t have an account?{" "}
+            <button onClick={() => setShowSignup(true)}>
+              Sign Up
+            </button>
+          </>
+        )}
+      </div>
+    );
+
     return (
       <MainContent>
-        <div style={styles.authContainer}>
-          {showSignup ? <SignupForm /> : <LoginForm />}
-          <p style={styles.authSwitch}>
-            {showSignup ? (
-              <>
-                Already have an account?{" "}
-                <button style={styles.authButton} onClick={() => setShowSignup(false)}>
-                  Login
-                </button>
-              </>
-            ) : (
-              <>
-                Don’t have an account?{" "}
-                <button style={styles.authButton} onClick={() => setShowSignup(true)}>
-                  Sign Up
-                </button>
-              </>
-            )}
-          </p>
-        </div>
+        {showSignup ? <SignupForm footer={switchFooter} /> : <LoginForm footer={switchFooter} />}
       </MainContent>
     );
   }
