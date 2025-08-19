@@ -1,11 +1,26 @@
+/* Center wrapper to vertically center the form on larger screens */
+.centerWrap {
+  min-height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
 .card {
+  width: 100%;
   max-width: 420px;
-  margin: 12px auto;
-  padding: 18px;
-  border-radius: var(--radius);
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: calc(var(--radius) - 2px);
   background: var(--card-bg);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
+  border: none; /* removed heavy border */
+  box-shadow: 0 6px 18px rgba(16,24,40,0.06); /* softer shadow */
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.card:hover {
+  transform: translateY(-3px);
 }
 
 .title {
@@ -56,6 +71,32 @@
   text-align: center;
 }
 
+.formFooter {
+  text-align: center;
+  margin-top: 12px;
+}
+
+.formFooter button {
+  background: none;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.formFooter button:hover {
+  background: var(--glass);
+}
+
+.formFooter button:focus-visible {
+  outline: 3px solid rgba(0, 112, 243, 0.18);
+  outline-offset: 2px;
+}
+
 @media (max-width: 480px) {
   .card { padding: 12px; }
+  .centerWrap { min-height: auto; padding: 12px 8px; }
 }
