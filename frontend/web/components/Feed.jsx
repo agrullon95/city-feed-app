@@ -1,38 +1,41 @@
 import { useState, useEffect } from 'react';
-import { fetchPosts } from '../api/posts';
+import axios from 'axios';
 import PostCard from './PostCard';
+import { useAuth } from '../context/authContext';
 
 const Feed = ({ city, tags }) => {
-    const [ posts, setPosts] = useState([]);
-    const [ page, setPage ] = useState(1);
-    const [loading, setLoading] = useState(false);
+  const { user, token } = useAuth();
+  const [posts, setPosts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
 
-    const loadPosts = async () => {
-        setLoading(true);
-        const newPosts = await fetchPosts({ page, city, tags });
-        console.log({newPosts});
-        setPosts( (prevPosts) => [...prevPosts, ...newPosts]);
-        setLoading(false);
+  const loadPosts = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/posts`, {
+        params: { page, city, tags },
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setPosts(prev => [...prev, ...res.data]);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    console.log({posts});
+  useEffect(() => {
+    loadPosts();
+  }, [page, city, tags]);
 
-    useEffect(() => {
-        loadPosts();
-    }, [page, city, tags]);
-
-    const handleLoadMore = () => setPage((prevPage) => prevPage + 1);
-
-    return (
-        <div>
-            {posts.map((post) => (
-                <PostCard key={post.id} post={post} />
-            ))}
-            <button onClick={handleLoadMore} disabled={loading}>
-                {loading ? 'Loading...' : 'Load More'}
-            </button>
-        </div>
-    )
-}
+  return (
+    <div>
+      {posts.map(post => <PostCard key={post.id} post={post} />)}
+      <button onClick={() => setPage(p => p + 1)} disabled={loading}>
+        {loading ? 'Loading...' : 'Load More'}
+      </button>
+    </div>
+  );
+};
 
 export default Feed;
