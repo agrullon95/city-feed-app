@@ -3,8 +3,12 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import PostCard from './PostCard';
 import styles from '../styles/Thread.module.css';
+import { useAuth } from '../context/authContext';
+import { useRouter } from 'next/router';
 
 const Thread = ({ thread }) => {
+    const { user, token } = useAuth();
+    const router = useRouter();
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
 
@@ -22,10 +26,21 @@ const Thread = ({ thread }) => {
     }, [thread.id]);
 
     const handleAddComment = async () => {
+        if (!user) {
+            // If user is not authenticated, send them to login
+            router.push('/login');
+            return;
+        }
+
+        const content = newComment.trim();
+        if (!content) return;
+
         try {
-            const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/${thread.id}/comments`, {
-                content: newComment,
-            });
+            const res = await axios.post(
+                `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${thread.id}/comments`,
+                { content },
+                { withCredentials: true }
+            );
             setComments(prev => [...prev, res.data]);
             setNewComment('');
         } catch (err) {
@@ -48,7 +63,13 @@ const Thread = ({ thread }) => {
                 ) : (
                     comments.map(comment => (
                         <div key={comment.id} className={styles.commentCard}>
-                            <p><strong>{comment.authorName}</strong>: {comment.content}</p>
+                            <div className={styles.commentAvatar} />
+                            <div className={styles.commentBody}>
+                                <div className={styles.commentMeta}>
+                                    {comment.author?.username || 'Anonymous'} • {new Date(comment.createdAt).toLocaleString()}
+                                </div>
+                                <div>{comment.content}</div>
+                            </div>
                         </div>
                     ))
                 )}
@@ -60,9 +81,17 @@ const Thread = ({ thread }) => {
                     className={styles.commentInput}
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
-                    placeholder="Write a comment..."
+                    placeholder={user ? "Write a comment..." : "Sign in to add a comment"}
+                    disabled={!user}
+                    aria-label="Add a comment"
                 />
-                <button className={styles.submitButton} onClick={handleAddComment}>Submit</button>
+                <button
+                    className={styles.submitButton}
+                    onClick={handleAddComment}
+                    disabled={!user || newComment.trim().length === 0}
+                >
+                    {user ? 'Submit' : 'Sign in'}
+                </button>
             </div>
         </div>
     );

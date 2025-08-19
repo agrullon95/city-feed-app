@@ -20,14 +20,50 @@
   color: #fff;
   font-weight: 600;
   cursor: pointer;
+  text-decoration: none; /* ensure no underline */
+  transition: background 0.2s, transform 0.08s;
+}
+
+.btn:hover {
+  filter: brightness(0.95);
+  transform: translateY(-1px);
+}
+
+.btn:focus {
+  outline: 2px solid rgba(0,0,0,0.08);
+  outline-offset: 2px;
+}
+
+.btn:disabled,
+.btnGhost:disabled,
+.btnText:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
 }
 
 .btnText {
-  background: none;
+  background: transparent;
   border: none;
   color: var(--accent);
-  text-decoration: underline;
+  text-decoration: none; /* remove underline */
   cursor: pointer;
+  padding: 4px 6px;
+}
+
+.btnText:hover {
+  text-decoration: underline;
+}
+
+.btnGhost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.btnGhost:hover {
+  background: rgba(0,0,0,0.03);
 }
 
 .center {
