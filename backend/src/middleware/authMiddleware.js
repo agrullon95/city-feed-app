@@ -1,10 +1,10 @@
 const { verifyToken } = require('../utils/jwt');
 
 const authGuard = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) return res.status(401).json({ error: 'No token provided' });
+  // read token from cookie instead of header
+  const token = req.cookies?.token;
+  if (!token) return res.status(401).json({ error: 'No token provided' });
 
-  const token = authHeader.split(' ')[1];
   try {
     const decoded = verifyToken(token);
     req.user = decoded;
