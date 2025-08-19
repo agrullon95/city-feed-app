@@ -59,13 +59,17 @@ const NewPostForm = ({ onPostCreated }) => {
 
         <div className={styles.row}>
           <div className={`${styles.field} ${styles.flexGrow}`}>
+            <label className={styles.fieldLabel} htmlFor="newpost-city">City <span className={styles.requiredMark} aria-hidden="true">*</span></label>
             <input
+              id="newpost-city"
               className={styles.input}
               type="text"
               value={city}
               onChange={e => setCity(e.target.value)}
               placeholder="City"
               aria-label="City"
+              aria-required="true"
+              required
             />
           </div>
 

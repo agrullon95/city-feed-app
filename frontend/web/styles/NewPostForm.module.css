@@ -20,6 +20,16 @@
   gap: 6px;
 }
 
+.fieldLabel {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.requiredMark {
+  color: #c53030;
+  margin-left: 4px;
+}
+
 .textarea {
   min-height: 88px;
   resize: vertical;
