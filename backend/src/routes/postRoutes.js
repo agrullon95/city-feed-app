@@ -68,13 +68,14 @@ router.get('/', async (req, res) => {
 router.post('/:postId/comments', authMiddleware, async (req, res) => {
   try {
     const { postId } = req.params;
-    const { content } = req.body;
+  const { content, parentId } = req.body;
 
     const comment = await prisma.comment.create({
       data: {
         content,
         postId: parseInt(postId),
-        authorId: req.user.id,
+    authorId: req.user.id,
+    parentId: parentId ? parseInt(parentId) : null,
       },
     });
 
@@ -91,9 +92,9 @@ router.get('/:postId/comments', async (req, res) => {
     const { postId } = req.params;
 
     const comments = await prisma.comment.findMany({
-      where: { postId: parseInt(postId) },
-      orderBy: { createdAt: 'asc' },
-      include: { author: true },
+  where: { postId: parseInt(postId) },
+  orderBy: { createdAt: 'asc' },
+  include: { author: true, replies: { include: { author: true }, orderBy: { createdAt: 'asc' } } },
     });
 
     res.json(comments);

@@ -13,6 +13,8 @@ const Thread = ({ thread }) => {
     const router = useRouter();
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
+    const [replyingTo, setReplyingTo] = useState(null);
+    const [replyText, setReplyText] = useState('');
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState('');
 
@@ -78,6 +80,75 @@ const Thread = ({ thread }) => {
                                     {comment.author?.username || 'Anonymous'} • {new Date(comment.createdAt).toLocaleString()}
                                 </div>
                                 <div className={styles.commentContent}>{comment.content}</div>
+
+                                <div className={styles.commentActions}>
+                                    <button className={ui.btnText} onClick={() => {
+                                        setReplyingTo(replyingTo === comment.id ? null : comment.id);
+                                        setReplyText('');
+                                    }}>{replyingTo === comment.id ? 'Cancel' : 'Reply'}</button>
+                                </div>
+
+                                {/* replies (one level) */}
+                                {comment.replies && comment.replies.length > 0 && (
+                                    <div className={styles.replies}>
+                                        {comment.replies.map(r => (
+                                            <div key={r.id} className={styles.replyCard}>
+                                                <div className={styles.replyMeta}>{r.author?.username || 'Anonymous'} • {new Date(r.createdAt).toLocaleString()}</div>
+                                                <div className={styles.commentContent}>{r.content}</div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+
+                                {/* reply composer */}
+                                {replyingTo === comment.id && (
+                                    <div className={styles.replyComposer}>
+                                        <textarea
+                                            className={styles.commentTextarea}
+                                            value={replyText}
+                                            onChange={(e) => setReplyText(e.target.value)}
+                                            placeholder={user ? 'Write a reply…' : 'Sign in to reply'}
+                                            disabled={!user}
+                                            maxLength={500}
+                                        />
+                                        <div className={styles.composerActions}>
+                                            {(() => {
+                                                const remaining = Math.max(0, MAX_CONTENT - replyText.length);
+                                                const warn = remaining <= 20;
+                                                return (
+                                                    <div className={warn ? `${styles.charCount} ${styles.charCountWarn}` : styles.charCount}>
+                                                        {remaining} characters
+                                                    </div>
+                                                );
+                                            })()}
+                                            <button
+                                                className={ui.btnPrimary}
+                                                onClick={async () => {
+                                                    if (!user) return router.push('/login');
+                                                    const content = replyText.trim();
+                                                    if (!content) return;
+                                                    try {
+                                                        const res = await axios.post(
+                                                            `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${thread.id}/comments`,
+                                                            { content, parentId: comment.id },
+                                                            { withCredentials: true }
+                                                        );
+                                                        // append reply locally under the parent comment
+                                                        setComments(prev => prev.map(c => c.id === comment.id ? { ...c, replies: [...(c.replies || []), res.data] } : c));
+                                                        setReplyText('');
+                                                        setReplyingTo(null);
+                                                    } catch (err) {
+                                                        console.error(err);
+                                                    }
+                                                }}
+                                                disabled={!user || replyText.trim().length === 0}
+                                            >
+                                                Reply
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+
                             </div>
                         </div>
                     ))

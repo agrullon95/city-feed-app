@@ -137,3 +137,33 @@
   margin-top: 8px;
   font-size: 13px;
 }
+
+.commentActions {
+  margin-top: 8px;
+}
+
+.replies {
+  margin-top: 12px;
+  margin-left: 56px; /* indent replies under avatar */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.replyCard {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.replyMeta {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.replyComposer {
+  margin-top: 10px;
+  margin-left: 56px;
+}

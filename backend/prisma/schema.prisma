@@ -38,4 +38,9 @@ model Comment {
   postId    Int
   author    User?    @relation(fields: [authorId], references: [id])
   authorId  Int?
+
+  /* parent comment for single-level replies */
+  parent    Comment? @relation("CommentReplies", fields: [parentId], references: [id])
+  parentId  Int?
+  replies   Comment[] @relation("CommentReplies")
 }
