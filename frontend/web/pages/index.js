@@ -6,6 +6,7 @@ import { AuthProvider, useAuth } from "../context/authContext";
 import { Navbar, MainContent, Footer } from "../components/Layout";
 import LoginForm from "../components/LoginForm";
 import SignupForm from "../components/SignupForm";
+import ui from '../styles/ui.module.css';
 
 function HomeContent() {
   const { user, loading, logout } = useAuth();
@@ -14,25 +15,20 @@ function HomeContent() {
 
   const handlePostCreated = () => setRefreshKey((prev) => prev + 1);
 
-  if (loading)
-    return <div style={styles.loading}>Loading...</div>;
+  if (loading) return <div className={ui.loading}>Loading...</div>;
 
   if (!user) {
     const switchFooter = (
-      <div className=""/* footer styled by form module */>
+      <div className={ui.center}>
         {showSignup ? (
           <>
-            Already have an account?{" "}
-            <button onClick={() => setShowSignup(false)}>
-              Login
-            </button>
+            Already have an account?{' '}
+            <button className={ui.btnText} onClick={() => setShowSignup(false)}>Login</button>
           </>
         ) : (
           <>
-            Don’t have an account?{" "}
-            <button onClick={() => setShowSignup(true)}>
-              Sign Up
-            </button>
+            Don’t have an account?{' '}
+            <button className={ui.btnText} onClick={() => setShowSignup(true)}>Sign Up</button>
           </>
         )}
       </div>
@@ -50,7 +46,7 @@ function HomeContent() {
     <>
       <Navbar logout={logout} />
       <MainContent>
-        <h1 style={styles.welcomeMessage}>Welcome, {user.username} 👋</h1>
+        <h1 className={ui.center}>Welcome, {user.username} 👋</h1>
         <NewPostForm onPostCreated={handlePostCreated} />
         <Feed key={refreshKey} />
       </MainContent>
@@ -58,42 +54,6 @@ function HomeContent() {
     </>
   );
 }
-
-const styles = {
-  loading: {
-    textAlign: "center",
-    fontSize: "18px",
-    color: "#666",
-    marginTop: "20px",
-  },
-  authContainer: {
-    textAlign: "center",
-    padding: "20px",
-    border: "1px solid #eaeaea",
-    borderRadius: "8px",
-    backgroundColor: "#f9f9f9",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-  },
-  authSwitch: {
-    marginTop: "10px",
-    fontSize: "14px",
-    color: "#555",
-  },
-  authButton: {
-    background: "none",
-    border: "none",
-    color: "#0070f3",
-    cursor: "pointer",
-    textDecoration: "underline",
-    fontSize: "14px",
-  },
-  welcomeMessage: {
-    fontSize: "24px",
-    fontWeight: "bold",
-    marginBottom: "20px",
-    textAlign: "center",
-  },
-};
 
 export default function Home({ pageProps }) {
   return (

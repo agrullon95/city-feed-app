@@ -34,19 +34,30 @@ router.get('/', async (req, res) => {
 
   try {
     const tagArray = tags ? tags.split(',') : undefined;
+
+    // Fetch total count of posts for pagination metadata
+    const totalCount = await prisma.post.count({
+      where: {
+        city: city || undefined,
+        tags: tagArray ? { hasSome: tagArray } : undefined,
+      },
+    });
+
     const posts = await prisma.post.findMany({
       where: {
         city: city || undefined,
         tags: tagArray ? { hasSome: tagArray } : undefined,
       },
       orderBy: { createdAt: 'desc' },
-      include: { author: true },
       skip: (parseInt(page) - 1) * parseInt(limit),
       take: parseInt(limit),
       include: { author: true },
     });
 
-    res.json(posts);
+    // Calculate if there are more posts to load
+    const hasMore = (parseInt(page) * parseInt(limit)) < totalCount;
+
+    res.json({ posts, totalCount, hasMore });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Failed to fetch posts' });
