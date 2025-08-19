@@ -60,16 +60,63 @@
   resize: vertical;
 }
 
-.submitButton {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: none;
-  background: var(--accent);
-  color: #fff;
-  font-weight: 600;
-  cursor: pointer;
+/* submit visuals moved to ui.module.css (.btnPrimary) */
+
+/* composer */
+.composerAvatarImg {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  object-fit: cover;
 }
 
-.submitButton:hover {
-  filter: brightness(0.95);
+.composerBox {
+  flex: 1;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.commentTextarea {
+  width: 100%;
+  min-height: 80px;
+  border: none;
+  resize: vertical;
+  font-size: 14px;
+  padding: 6px;
+  background: transparent;
+}
+
+.commentTextarea:disabled {
+  opacity: 0.6;
+}
+
+.composerActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.charCount {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* submit visuals moved to ui.module.css (.btnPrimary) */
+
+
+
+/* hover/disabled visuals are defined in ui.module.css */
+
+.inlineError {
+  color: #c53030; /* red-600 */
+  background: rgba(197, 52, 52, 0.06);
+  padding: 8px 10px;
+  border-radius: 8px;
+  margin-top: 8px;
+  font-size: 13px;
 }

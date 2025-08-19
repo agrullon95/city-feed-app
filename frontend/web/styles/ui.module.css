@@ -53,13 +53,78 @@
 }
 
 .btnText:hover {
-  text-decoration: underline;
+  /* remove underline and use subtle opacity change for hover */
+  text-decoration: none;
+  opacity: 0.92;
 }
 
 .btnGhost {
   background: transparent;
   border: 1px solid var(--border);
   color: var(--text);
+}
+
+/* Primary button variant to be reused by components */
+.btnPrimary {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: filter 0.15s ease, opacity 0.12s ease;
+}
+
+.btnPrimary:hover {
+  filter: brightness(0.92);
+}
+
+.btnPrimary:disabled {
+  background: #9bbcfb;
+  color: #fff;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+/* Small icon/text button used in lists and action bars */
+.btnIcon {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btnIcon:hover {
+  background: var(--glass);
+  opacity: 0.96;
+}
+
+.btnIcon:focus-visible {
+  outline: 3px solid rgba(0, 112, 243, 0.18);
+  outline-offset: 2px;
+}
+
+/* Small variants for tighter UI */
+.btnPrimarySm {
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.btnIconSm {
+  padding: 4px 6px;
+  gap: 4px;
+  border-radius: 6px;
+  font-size: 13px;
 }
 
 .btnGhost:hover {
