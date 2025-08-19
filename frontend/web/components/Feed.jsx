@@ -41,8 +41,8 @@ const Feed = ({ city, tags }) => {
 };
 
 Feed.propTypes = {
-  city: PropTypes.string.isRequired,
-  tags: PropTypes.arrayOf(PropTypes.string).isRequired,
+  city: PropTypes.string,
+  tags: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default Feed;
