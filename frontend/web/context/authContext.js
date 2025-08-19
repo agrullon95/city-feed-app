@@ -67,8 +67,18 @@ export const AuthProvider = ({ children, initialUser }) => {
     }
   };
 
+  const updateProfile = async (data) => {
+    try {
+      const res = await axios.patch(`${API_BASE}/api/auth/me`, data, { withCredentials: true });
+      setUser(res.data.user);
+      return res.data.user;
+    } catch (err) {
+      throw err.response?.data?.error || 'Update failed';
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, signup, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, signup, logout, updateProfile }}>
       {children}
     </AuthContext.Provider>
   );

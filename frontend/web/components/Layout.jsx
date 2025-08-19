@@ -25,11 +25,17 @@ export const Navbar = ({ title = 'City Feed', logout = () => { }, user = null, l
       ) : (
         user && (
           <div className={styles.profile}>
-            <img
-              src={user.avatarUrl || 'https://placehold.co/40'}
-              alt={user.name ? `${user.name} profile` : 'Profile'}
-              className={styles.avatar}
-            />
+            <button
+              className={styles.avatarBtn}
+              onClick={() => router.push('/profile')}
+              aria-label="Open profile"
+            >
+              <img
+                src={user.avatarUrl || 'https://placehold.co/40'}
+                alt={user.name ? `${user.name} profile` : 'Profile'}
+                className={styles.avatar}
+              />
+            </button>
             <button
               className={ui.btnText}
               onClick={logout}

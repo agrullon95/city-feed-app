@@ -92,4 +92,24 @@ const me = async (req, res) => {
   }
 };
 
-module.exports = { signup, login, logout, me};
+const updateMe = async (req, res) => {
+  const token = req.cookies?.token;
+  if (!token) return res.status(401).json({ error: 'Not authenticated' });
+
+  try {
+    const decoded = verifyToken(token);
+    const { username } = req.body;
+
+    const user = await prisma.user.update({
+      where: { id: decoded.id },
+      data: { username },
+      select: { id: true, username: true, email: true },
+    });
+
+    res.json({ user });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+module.exports = { signup, login, logout, me, updateMe };
