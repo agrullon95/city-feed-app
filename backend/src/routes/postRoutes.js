@@ -68,39 +68,44 @@ router.get('/', async (req, res) => {
 router.post('/:postId/comments', authMiddleware, async (req, res) => {
   try {
     const { postId } = req.params;
-    const { content, parentId } = req.body;
+      const { content, parentId } = req.body;
+      const { validateParentComment } = require('../utils/commentUtils');
 
-    // validate parentId if provided
-    let parsedParentId = null;
-    if (parentId !== undefined && parentId !== null) {
-      parsedParentId = parseInt(parentId);
-      if (Number.isNaN(parsedParentId)) {
-        return res.status(400).json({ error: 'Invalid parentId' });
+      try {
+        const parsedParentId = await validateParentComment(prisma, parseInt(postId), parentId);
+
+        const created = await prisma.comment.create({
+          data: {
+            content,
+            postId: parseInt(postId),
+            authorId: req.user.id,
+            parentId: parsedParentId,
+          },
+        });
+
+        const comment = await prisma.comment.findUnique({
+          where: { id: created.id },
+          include: { author: true, replies: { include: { author: true }, orderBy: { createdAt: 'asc' } } },
+        });
+
+        res.json(comment);
+      } catch (err) {
+        // validation errors return 400 with message
+        return res.status(400).json({ error: err.message });
       }
 
-      const parent = await prisma.comment.findUnique({ where: { id: parsedParentId } });
-      if (!parent) {
-        return res.status(400).json({ error: 'Parent comment not found' });
-      }
-
-      // ensure parent belongs to the same post
-      if (parent.postId !== parseInt(postId)) {
-        return res.status(400).json({ error: 'Parent comment does not belong to this post' });
-      }
-
-      // disallow replying to replies (only one level)
-      if (parent.parentId !== null) {
-        return res.status(400).json({ error: 'Replies to replies are not allowed' });
-      }
-    }
-
-    const comment = await prisma.comment.create({
+    const created = await prisma.comment.create({
       data: {
         content,
         postId: parseInt(postId),
         authorId: req.user.id,
         parentId: parsedParentId,
       },
+    });
+
+    const comment = await prisma.comment.findUnique({
+      where: { id: created.id },
+      include: { author: true, replies: { include: { author: true }, orderBy: { createdAt: 'asc' } } },
     });
 
     res.json(comment);
