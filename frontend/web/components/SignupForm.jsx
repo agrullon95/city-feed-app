@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/authContext";
 import styles from "../styles/SignupForm.module.css";
+import PropTypes from 'prop-types';
 
-const SignupForm = () => {
+const SignupForm = ({ footer }) => {
   const { signup, loading } = useAuth();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -84,9 +85,15 @@ const SignupForm = () => {
         <button className={styles.submit} type="submit" disabled={loading}>
           {loading ? "Signing up..." : "Sign Up"}
         </button>
+
+        {footer && <div className={styles.formFooter}>{footer}</div>}
       </form>
     </section>
   );
+};
+
+SignupForm.propTypes = {
+  footer: PropTypes.node,
 };
 
 export default SignupForm;
