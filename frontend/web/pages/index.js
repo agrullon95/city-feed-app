@@ -3,10 +3,10 @@ import PropTypes from "prop-types";
 import NewPostForm from "../components/NewPostForm";
 import React, { useState } from "react";
 import { AuthProvider, useAuth } from "../context/authContext";
-import { Navbar, MainContent, Footer } from "../components/Layout";
 import LoginForm from "../components/LoginForm";
 import SignupForm from "../components/SignupForm";
 import ui from '../styles/ui.module.css';
+import { MainContent } from "../components/Layout";
 
 function HomeContent() {
   const { user, loading, logout } = useAuth();
@@ -43,15 +43,11 @@ function HomeContent() {
 
   // If logged in -> show feed
   return (
-    <>
-      <Navbar logout={logout} />
-      <MainContent>
-        <h1 className={ui.center}>Welcome, {user.username} 👋</h1>
-        <NewPostForm onPostCreated={handlePostCreated} />
-        <Feed key={refreshKey} />
-      </MainContent>
-      <Footer />
-    </>
+    <MainContent>
+      <h1 className={ui.center}>Welcome, {user.username} 👋</h1>
+      <NewPostForm onPostCreated={handlePostCreated} />
+      <Feed key={refreshKey} />
+    </MainContent>
   );
 }
 

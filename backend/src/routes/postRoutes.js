@@ -64,4 +64,64 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Create a new comment for a post
+router.post('/:postId/comments', authMiddleware, async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const { content } = req.body;
+
+    const comment = await prisma.comment.create({
+      data: {
+        content,
+        postId: parseInt(postId),
+        authorId: req.user.id,
+      },
+    });
+
+    res.json(comment);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to create comment' });
+  }
+});
+
+// Get comments for a post
+router.get('/:postId/comments', async (req, res) => {
+  try {
+    const { postId } = req.params;
+
+    const comments = await prisma.comment.findMany({
+      where: { postId: parseInt(postId) },
+      orderBy: { createdAt: 'asc' },
+      include: { author: true },
+    });
+
+    res.json(comments);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to fetch comments' });
+  }
+});
+
+// Get a single post by ID
+router.get('/:postId', async (req, res) => {
+  try {
+    const { postId } = req.params;
+
+    const post = await prisma.post.findUnique({
+      where: { id: parseInt(postId) },
+      include: { author: true },
+    });
+
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    res.json(post);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to fetch post' });
+  }
+});
+
 module.exports = router;
