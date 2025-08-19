@@ -31,20 +31,27 @@
   background: #e6e6e6;
 }
 
-.logoutBtn {
-  padding: 6px 10px;
-  border-radius: 8px;
-  border: 1px solid transparent;
-  background: transparent;
-  color: var(--accent);
-  cursor: pointer;
-  font-weight: 600;
-  text-decoration: none;
+/* small skeleton for profile while auth is loading */
+.profileSkeleton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.skeletonAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #e6e6e6;
+}
+.skeletonText {
+  width: 60px;
+  height: 12px;
+  border-radius: 6px;
+  background: #e6e6e6;
 }
 
-.logoutBtn:hover {
-  background: rgba(0, 118, 255, 0.06);
-}
+
+
 
 .main {
   max-width: var(--max-width);

@@ -19,12 +19,12 @@
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
-  transition: background var(--transition), transform var(--transition);
+  transition: background var(--transition), filter var(--transition);
   text-decoration: none;
 }
 
 .loadMore:hover:not(:disabled) {
-  transform: translateY(-2px);
+  filter: brightness(0.96);
 }
 
 .loadMore:disabled {

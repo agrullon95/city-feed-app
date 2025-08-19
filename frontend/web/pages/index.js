@@ -2,7 +2,7 @@ import Feed from "../components/Feed";
 import PropTypes from "prop-types";
 import NewPostForm from "../components/NewPostForm";
 import React, { useState } from "react";
-import { AuthProvider, useAuth } from "../context/authContext";
+import { useAuth } from "../context/authContext";
 import LoginForm from "../components/LoginForm";
 import SignupForm from "../components/SignupForm";
 import ui from '../styles/ui.module.css';
@@ -51,12 +51,8 @@ function HomeContent() {
   );
 }
 
-export default function Home({ pageProps }) {
-  return (
-    <AuthProvider initialUser={pageProps?.initialUser}>
-      <HomeContent />
-    </AuthProvider>
-  );
+export default function Home() {
+  return <HomeContent />;
 }
 
 Home.propTypes = {

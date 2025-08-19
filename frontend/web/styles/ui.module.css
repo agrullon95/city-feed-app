@@ -21,12 +21,11 @@
   font-weight: 600;
   cursor: pointer;
   text-decoration: none; /* ensure no underline */
-  transition: background 0.2s, transform 0.08s;
+  transition: background 0.2s, filter 0.08s;
 }
 
 .btn:hover {
   filter: brightness(0.95);
-  transform: translateY(-1px);
 }
 
 .btn:focus {
@@ -39,6 +38,7 @@
 .btnText:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  /* ensure disabled buttons don't apply any transform */
   transform: none;
   filter: none;
 }

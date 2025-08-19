@@ -16,11 +16,13 @@
   background: var(--card-bg);
   border: none; /* removed heavy border */
   box-shadow: 0 6px 18px rgba(16,24,40,0.06); /* softer shadow */
-  transition: transform var(--transition), box-shadow var(--transition);
+  transition: box-shadow var(--transition), filter var(--transition);
 }
 
 .card:hover {
-  transform: translateY(-3px);
+  /* subtle emphasis without lifting the card */
+  box-shadow: 0 10px 30px rgba(16,24,40,0.06);
+  filter: brightness(0.995);
 }
 
 .title {

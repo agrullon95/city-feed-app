@@ -1,0 +1,21 @@
+.overlay {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 60px; /* below header */
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1200;
+}
+
+.spinner {
+  pointer-events: auto;
+  background: rgba(255,255,255,0.95);
+  color: var(--text);
+  padding: 6px 10px;
+  border-radius: 999px;
+  box-shadow: 0 6px 18px rgba(16,24,40,0.08);
+  font-weight: 600;
+  font-size: 13px;
+}
