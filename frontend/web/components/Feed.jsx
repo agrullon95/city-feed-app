@@ -1,4 +1,6 @@
+import React from 'react';
 import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import PostCard from './PostCard';
 import { useAuth } from '../context/authContext';
@@ -36,6 +38,11 @@ const Feed = ({ city, tags }) => {
       </button>
     </div>
   );
+};
+
+Feed.propTypes = {
+  city: PropTypes.string.isRequired,
+  tags: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default Feed;

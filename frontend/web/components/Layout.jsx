@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 // Navbar
 export const Navbar = ({ title = "City Feed", logout }) => (
@@ -27,12 +28,20 @@ export const Navbar = ({ title = "City Feed", logout }) => (
   </header>
 );
 
-// Main content wrapper
+Navbar.propTypes = {
+  title: PropTypes.string,
+  logout: PropTypes.func.isRequired,
+};
+
 export const MainContent = ({ children }) => (
   <main style={{ maxWidth: "960px", margin: "0 auto", padding: "20px" }}>
     {children}
   </main>
 );
+
+MainContent.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 // Footer
 export const Footer = () => (

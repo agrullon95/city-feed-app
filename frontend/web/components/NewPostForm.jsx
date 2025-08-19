@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
-import { useAuth } from '../context/authContext';
 
 const NewPostForm = ({ onPostCreated }) => {
   const [content, setContent] = useState('');
@@ -49,6 +49,9 @@ const NewPostForm = ({ onPostCreated }) => {
       <button type="submit" disabled={loading}>{loading ? 'Posting...' : 'Post'}</button>
     </form>
   );
+};
+NewPostForm.propTypes = {
+  onPostCreated: PropTypes.func,
 };
 
 export default NewPostForm;
