@@ -1,14 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useRouter } from 'next/router';
 import styles from '../styles/PostCard.module.css';
 
 const PostCard = ({ post }) => {
+  const router = useRouter();
   const authorName = post.anonymous ? 'Anonymous' : post.author?.username || 'Unknown';
   const avatar = post.author?.avatar || 'https://placehold.co/40';
   const createdAt = post.createdAt ? new Date(post.createdAt) : null;
 
+  const handleOpenThread = () => {
+    router.push(`/thread/${post.id}`);
+  };
+
   return (
-    <article className={styles.card}>
+    <article onClick={handleOpenThread} className={styles.card}>
       <div className={styles.header}>
         <img className={styles.avatar} src={avatar} alt={`${authorName} avatar`} />
         <div>
