@@ -51,7 +51,7 @@ router.get('/', async (req, res) => {
       orderBy: { createdAt: 'desc' },
       skip: (parseInt(page) - 1) * parseInt(limit),
       take: parseInt(limit),
-      include: { author: true },
+      include: { author: true, _count: { select: { comments: true } } },
     });
 
     // Calculate if there are more posts to load

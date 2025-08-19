@@ -51,6 +51,12 @@ const Thread = ({ thread, onCommentAdded }) => {
             );
             setComments(prev => [...prev, res.data]);
             if (onCommentAdded) onCommentAdded(res.data);
+            // notify other parts of the app (feed) about the new comment
+            try {
+                window.dispatchEvent(new CustomEvent('comment:created', { detail: { postId: thread.id, comment: res.data } }));
+            } catch (e) {
+                // ignore in non-browser environments
+            }
             setNewComment('');
         } catch (err) {
             console.error(err);

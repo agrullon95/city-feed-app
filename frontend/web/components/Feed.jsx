@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import { fetchPosts } from '../api/posts';
 import PostCard from './PostCard';
 import SkeletonPost from './SkeletonPost';
 import { useAuth } from '../context/authContext';
@@ -16,14 +17,22 @@ const Feed = ({ city, tags }) => {
   const [hasMore, setHasMore] = useState(true);
   const sentinelRef = useRef(null);
   const observer = useRef(null);
+  // Listen for global comment-created events to optimistically update feed counts
+  useEffect(() => {
+    const handler = (e) => {
+      const { postId } = e.detail || {};
+      if (!postId) return;
+      setPosts(prev => prev.map(p => (p.id === postId ? { ...p, commentsCount: (p.commentsCount ?? p._count?.comments ?? p.comments?.length ?? 0) + 1 } : p)));
+    };
+
+    if (typeof window !== 'undefined') window.addEventListener('comment:created', handler);
+    return () => { if (typeof window !== 'undefined') window.removeEventListener('comment:created', handler); };
+  }, []);
 
   const loadPosts = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/posts`,
-        { page, city, tags, limit: 20 }
-      );
-      const { posts: newPosts, hasMore: morePosts } = res.data;
+      const { posts: newPosts, hasMore: morePosts } = await fetchPosts({ page, limit: 20, city, tags });
       setPosts(prev => {
         const existingIds = new Set(prev.map(post => post.id));
         const uniquePosts = newPosts.filter(post => !existingIds.has(post.id));

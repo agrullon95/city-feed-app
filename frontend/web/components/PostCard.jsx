@@ -71,13 +71,12 @@ const PostCard = ({ post }) => {
           >
             👍 <span className={styles.count}>{post.likes || 0}</span>
           </button>
-
           <button
             className={`${ui.btnIcon} ${ui.btnIconSm}`}
             aria-label="comment"
             onClick={(e) => { e.stopPropagation(); handleOpenThread(); }}
           >
-            💬 <span className={styles.count}>{post.commentsCount ?? post.comments?.length ?? 0}</span>
+            💬 <span className={styles.count}>{post.commentsCount ?? post._count?.comments ?? post.comments?.length ?? 0}</span>
           </button>
         </div>
 
@@ -101,6 +100,7 @@ PostCard.propTypes = {
     createdAt: PropTypes.string,
     likes: PropTypes.number,
     commentsCount: PropTypes.number,
+    _count: PropTypes.shape({ comments: PropTypes.number }),
     comments: PropTypes.array,
   }).isRequired,
 };
