@@ -93,7 +93,13 @@ const NewPostForm = ({ onPostCreated }) => {
         </div>
 
         <div className={styles.actions}>
-          <div className={styles.charCount} aria-live="polite">{MAX_CONTENT - content.length} characters</div>
+          {(() => {
+            const remaining = Math.max(0, MAX_CONTENT - content.length);
+            const warn = remaining <= 20;
+            return (
+              <div className={warn ? `${styles.charCount} ${styles.charCountWarn}` : styles.charCount} aria-live="polite">{remaining} characters</div>
+            );
+          })()}
           <button
             className={ui.btnPrimary}
             type="submit"

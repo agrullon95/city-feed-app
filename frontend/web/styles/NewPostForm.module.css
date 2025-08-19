@@ -68,6 +68,22 @@
   color: var(--muted);
 }
 
+/* warning state when user is near the character limit */
+.charCountWarn {
+  color: #b47600; /* amber/dark yellow */
+  font-weight: 600;
+}
+
+/* inline field error / hint */
+.inlineError {
+  color: #c53030; /* red-600 */
+  background: rgba(197, 52, 52, 0.06);
+  padding: 6px 8px;
+  border-radius: 6px;
+  margin-top: 6px;
+  font-size: 13px;
+}
+
 /* submit visuals moved to ui.module.css (.btnPrimary) */
 
 .hint {
