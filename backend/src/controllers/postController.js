@@ -1,5 +1,5 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const { prisma } = require('../prismaClient');
+const { validateParentComment } = require('../utils/commentUtils');
 
 const createPost = async (req, res) => {
   try {
@@ -82,7 +82,6 @@ const createPostComment = async (req, res) => {
   try {
     const { postId } = req.params;
       const { content, parentId } = req.body;
-      const { validateParentComment } = require('../utils/commentUtils');
 
       try {
         const parsedParentId = await validateParentComment(prisma, parseInt(postId), parentId);

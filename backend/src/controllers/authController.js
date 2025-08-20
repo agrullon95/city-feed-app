@@ -1,7 +1,6 @@
 const bcrypt = require('bcrypt');
 const prisma = require('../prismaClient');
-const { generateToken } = require('../utils/jwt');
-const {verifyToken} = require('../utils/jwt');
+const { generateToken, verifyToken } = require('../utils/jwt');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
