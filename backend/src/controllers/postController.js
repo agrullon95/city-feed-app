@@ -1,4 +1,4 @@
-const { prisma } = require('../prismaClient');
+const prisma = require('../prismaClient');
 const { validateParentComment } = require('../utils/commentUtils');
 
 const createPost = async (req, res) => {
