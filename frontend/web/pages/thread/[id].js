@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import axios from 'axios';
+import client from '../../api/client';
 import Thread from '../../components/Thread';
 import styles from '../../styles/Thread.module.css';
 
@@ -15,7 +15,7 @@ const ThreadPage = () => {
 
     const fetchThread = async () => {
       try {
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/${id}`);
+        const res = await client.get(`/api/posts/${id}`);
         setThread(res.data);
       } catch (err) {
         console.error(err);

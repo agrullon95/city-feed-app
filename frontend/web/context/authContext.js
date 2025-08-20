@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
-import axios from 'axios';
+import client from '../api/client';
 
 const AuthContext = createContext();
 
@@ -13,29 +13,25 @@ export const AuthProvider = ({ children, initialUser }) => {
   const router = useRouter();
 
   useEffect(() => {
-  const fetchUser = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get(`${API_BASE}/api/auth/me`, {
-        withCredentials: true, // sends the cookie automatically
-      });
-      setUser(res.data.user);
-    } catch {
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
-  };
+    const fetchUser = async () => {
+      setLoading(true);
+      try {
+        const res = await client.get('/api/auth/me');
+        setUser(res.data.user);
+      } catch {
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  fetchUser();
-}, []);
+    fetchUser();
+  }, []);
 
 
   const login = async (data) => {
     try {
-      const res = await axios.post(`${API_BASE}/api/auth/login`, data, {
-        withCredentials: true,
-      });
+      const res = await client.post('/api/auth/login', data);
       setUser(res.data.user);
       router.push('/'); // redirect to main feed after login
       return res.data.user;
@@ -46,9 +42,7 @@ export const AuthProvider = ({ children, initialUser }) => {
 
   const signup = async (data) => {
     try {
-      const res = await axios.post(`${API_BASE}/api/auth/signup`, data, {
-        withCredentials: true,
-      });
+      const res = await client.post('/api/auth/signup', data);
       setUser(res.data.user);
       router.push('/');
       return res.data.user;
@@ -59,7 +53,7 @@ export const AuthProvider = ({ children, initialUser }) => {
 
   const logout = async () => {
     try {
-      await axios.post(`${API_BASE}/api/auth/logout`, {}, { withCredentials: true });
+      await client.post('/api/auth/logout');
       setUser(null);
       router.push('/');
     } catch (err) {
@@ -69,7 +63,7 @@ export const AuthProvider = ({ children, initialUser }) => {
 
   const updateProfile = async (data) => {
     try {
-      const res = await axios.patch(`${API_BASE}/api/auth/me`, data, { withCredentials: true });
+      const res = await client.patch('/api/auth/me', data);
       setUser(res.data.user);
       return res.data.user;
     } catch (err) {

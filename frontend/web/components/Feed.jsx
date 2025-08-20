@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
+import client from '../api/client';
 import { fetchPosts } from '../api/posts';
 import PostCard from './PostCard';
 import SkeletonPost from './SkeletonPost';

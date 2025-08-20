@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../styles/GlobalLoader.module.css';
-import axios from 'axios';
+import client from '../api/client';
 
 export default function GlobalLoader() {
     const [count, setCount] = useState(0);
 
     useEffect(() => {
-        const requestInterceptor = axios.interceptors.request.use((config) => {
+        const requestInterceptor = client.interceptors.request.use((config) => {
             setCount((c) => c + 1);
             return config;
-        }, (err) => {
-            return Promise.reject(err);
-        });
+        }, (err) => Promise.reject(err));
 
-        const responseInterceptor = axios.interceptors.response.use((res) => {
+        const responseInterceptor = client.interceptors.response.use((res) => {
             setCount((c) => Math.max(0, c - 1));
             return res;
         }, (err) => {
@@ -22,8 +20,8 @@ export default function GlobalLoader() {
         });
 
         return () => {
-            axios.interceptors.request.eject(requestInterceptor);
-            axios.interceptors.response.eject(responseInterceptor);
+            client.interceptors.request.eject(requestInterceptor);
+            client.interceptors.response.eject(responseInterceptor);
         };
     }, []);
 

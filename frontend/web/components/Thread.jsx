@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
+import client from '../api/client';
 import PostCard from './PostCard';
 import styles from '../styles/Thread.module.css';
 import ui from '../styles/ui.module.css';
@@ -21,7 +21,7 @@ const Thread = ({ thread, onCommentAdded }) => {
     useEffect(() => {
         const fetchComments = async () => {
             try {
-                const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/${thread.id}/comments`);
+                const res = await client.get(`/api/posts/${thread.id}/comments`);
                 setComments(res.data);
             } catch (err) {
                 console.error(err);
@@ -44,11 +44,7 @@ const Thread = ({ thread, onCommentAdded }) => {
         setError('');
         setSubmitting(true);
         try {
-            const res = await axios.post(
-                `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${thread.id}/comments`,
-                { content },
-                { withCredentials: true }
-            );
+            const res = await client.post(`/api/posts/${thread.id}/comments`, { content });
             setComments(prev => [...prev, res.data]);
             if (onCommentAdded) onCommentAdded(res.data);
             // notify other parts of the app (feed) about the new comment
@@ -135,11 +131,7 @@ const Thread = ({ thread, onCommentAdded }) => {
                                                     const content = replyText.trim();
                                                     if (!content) return;
                                                     try {
-                                                        const res = await axios.post(
-                                                            `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${thread.id}/comments`,
-                                                            { content, parentId: comment.id },
-                                                            { withCredentials: true }
-                                                        );
+                                                        const res = await client.post(`/api/posts/${thread.id}/comments`, { content, parentId: comment.id });
                                                         // append reply locally under the parent comment
                                                         setComments(prev => prev.map(c => c.id === comment.id ? { ...c, replies: [...(c.replies || []), res.data] } : c));
                                                         if (onCommentAdded) onCommentAdded(res.data);

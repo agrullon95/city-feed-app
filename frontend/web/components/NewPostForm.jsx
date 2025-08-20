@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
+import client from '../api/client';
 import styles from '../styles/NewPostForm.module.css';
 import ui from '../styles/ui.module.css';
 import { MAX_CONTENT } from '../utils/constants';
@@ -26,7 +26,7 @@ const NewPostForm = ({ onPostCreated }) => {
         anonymous,
       };
 
-      const { data } = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/posts`, payload, { withCredentials: true });
+      const { data } = await client.post('/api/posts', payload);
 
       setContent('');
       setCity('');
